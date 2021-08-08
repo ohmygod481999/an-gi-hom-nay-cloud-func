@@ -1,30 +1,33 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const gqlServer = require("./graphql/server");
+const { insertUser } = require("./hasura-services/user");
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
 admin.initializeApp();
 
-exports.getUserByUid = functions.https.onRequest(async (request, response) => {
-    const uid = request.query.uid;
-    if (uid) {
-        functions.logger.info(`User id: ${uid}`, {
-            structuredData: true,
-        });
-        const userRecord = await admin.auth().getUser(uid);
-        return response.json({
-            result: userRecord,
-        });
-    }
+const server = gqlServer();
 
-    response.json({
-        result: null,
-    });
-});
+const api = functions.https.onRequest(server);
 
-exports.sendWelcomeEmail = functions.auth.user().onCreate((user) => {
+const addUserHasura = functions.auth.user().onCreate(async (user) => {
+    const { uid } = user;
     functions.logger.info(`A user have created: ${JSON.stringify(user)}`, {
         structuredData: true,
     });
+    const result = await insertUser(uid);
+    functions.logger.info(
+        `User add to hasura cloud: ${JSON.stringify(result)}`,
+        {
+            structuredData: true,
+        }
+    );
+    return result;
 });
+
+module.exports = {
+    api,
+    addUserHasura,
+};
