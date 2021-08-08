@@ -3,7 +3,7 @@ const functions = require("firebase-functions");
 
 const resolversFunctions = {
     Query: {
-        user: async (parent, args, context, info) => {
+        userRecord: async (parent, args, context, info) => {
             const { uid } = args;
 
             const userRecord = await admin.auth().getUser(uid);

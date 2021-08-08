@@ -7,7 +7,7 @@ const schema = gql`
         lastRefreshTime: String
     }
 
-    type User {
+    type UserRecord {
         uid: String
         email: String
         displayName: String
@@ -20,7 +20,7 @@ const schema = gql`
 
     type Query {
         "A simple type for getting started!"
-        user(uid: String!): User
+        userRecord(uid: String!): UserRecord
     }
 `;
 
