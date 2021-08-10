@@ -17,6 +17,16 @@ const addUserHasura = functions.auth.user().onCreate(async (user) => {
     functions.logger.info(`A user have created: ${JSON.stringify(user)}`, {
         structuredData: true,
     });
+    await admin.auth().setCustomUserClaims(uid, {
+        isAdmin: false,
+    });
+    const userRecord = await admin.auth().getUser(uid);
+    functions.logger.info(
+        `SetCustomUserClaims: ${JSON.stringify(userRecord)}`,
+        {
+            structuredData: true,
+        }
+    );
     const result = await insertUser(uid);
     functions.logger.info(
         `User add to hasura cloud: ${JSON.stringify(result)}`,
