@@ -7,6 +7,14 @@ const schema = gql`
         lastRefreshTime: String
     }
 
+    type CustomClaims {
+        isAdmin: Boolean
+    }
+
+    type MutationResponse {
+        data: String
+    }
+
     type UserRecord {
         uid: String
         email: String
@@ -16,11 +24,16 @@ const schema = gql`
         photoURL: String
         disabled: Boolean
         metadata: UserMetadata
+        customClaims: CustomClaims
     }
 
     type Query {
         "A simple type for getting started!"
         userRecord(uid: String!): UserRecord
+    }
+
+    type Mutation {
+        grantAdminRole(uid: String!): MutationResponse
     }
 `;
 
