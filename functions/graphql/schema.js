@@ -27,9 +27,29 @@ const schema = gql`
         customClaims: CustomClaims
     }
 
+    type Restaurant {
+        id: Int
+        name: String
+        address: String
+        latlng: String
+        img: String
+        open: String
+        close: String
+    }
+
+    type Dish {
+        id: Int
+        name: String
+        price: Int
+        img: String
+        description: String
+        restaurant: Restaurant
+    }
+
     type Query {
         "A simple type for getting started!"
         userRecord(uid: String!): UserRecord
+        randomDish(mealId: Int!): Dish
     }
 
     type Mutation {
